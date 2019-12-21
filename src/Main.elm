@@ -5,10 +5,7 @@ import Browser.Navigation exposing (Key)
 import Html exposing (Html, div, h1, img, text)
 import Html.Attributes exposing (src)
 import Url exposing (Url)
-
-
-
----- MODEL ----
+import Url.Parser as Parser exposing ((</>), Parser)
 
 
 type alias Flags =
@@ -23,14 +20,39 @@ type alias Model =
     { token : Maybe Token, navigationKey : Key }
 
 
+type Msg
+    = NoOp
+
+
+type Route
+    = Signin String
+    | NotFound
+
+
+
+-- functions --
+--routeParser : Parser (Route -> a) a
+
+
+routeParser =
+    Parser.oneOf
+        [ Parser.map Signin (Parser.s "signin" </> Parser.string)
+        ]
+
+
 init : Flags -> Url -> Key -> ( Model, Cmd Msg )
 init flags url key =
     let
+        parsedUrl =
+            Maybe.withDefault NotFound (Parser.parse routeParser url)
+
         token =
-            String.split "/" url.path
-                |> List.reverse
-                |> List.head
-                |> Maybe.map Token
+            case parsedUrl of
+                Signin githubToken ->
+                    Just (Token githubToken)
+
+                _ ->
+                    Nothing
 
         newModel =
             { token = token
@@ -38,21 +60,13 @@ init flags url key =
             }
 
         _ =
-            Debug.log "log: " <| newModel
+            Debug.log "log " <| newModel
     in
     ( newModel, Cmd.none )
 
 
 
----- UPDATE ----
-
-
-type Msg
-    = NoOp
-
-
-
----- VIEW ----
+-- VIEW --
 
 
 view : Model -> Document Msg
@@ -70,6 +84,10 @@ onUrlRequest urlRequest =
 onUrlChange : Url -> Msg
 onUrlChange url =
     NoOp
+
+
+
+-- UPDATE --
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
