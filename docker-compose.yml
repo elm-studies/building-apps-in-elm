@@ -1,0 +1,12 @@
+version: "0.1"
+name: frontend
+services:
+  frontend:
+    image: building-elm-app
+    build:
+      context: .
+    volumes:
+      - .:/app/building-elm-app/
+    container_name: building-elm-app
+    ports:
+      - 4500:3000
