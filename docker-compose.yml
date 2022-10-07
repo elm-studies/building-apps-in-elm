@@ -3,7 +3,8 @@ name: frontend
 services:
   frontend:
     image: building-elm-app
-    build: context:.
+    build:
+      context: .
     depends_on:
       - server
     volumes:
