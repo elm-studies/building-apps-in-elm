@@ -3,10 +3,21 @@ name: frontend
 services:
   frontend:
     image: building-elm-app
-    build:
-      context: .
+    build: context:.
+    depends_on:
+      - server
     volumes:
       - .:/app/building-elm-app/
     container_name: building-elm-app
     ports:
       - 4500:3000
+  server:
+    image: oauth-local-node-express
+    container_name: oauth-server
+    volumes:
+      - ./server/public:/app/public
+    env_file:
+      - ./server/.env
+    ports:
+      - 3500:3000
+    restart: on-failure
