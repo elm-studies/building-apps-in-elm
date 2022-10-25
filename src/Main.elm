@@ -31,9 +31,9 @@ type Route
 
 
 -- functions --
---routeParser : Parser (Route -> a) a
 
 
+routeParser : Parser (Route -> a) a
 routeParser =
     Parser.oneOf
         [ Parser.map Signin (Parser.s "signin" </> Parser.string)
@@ -45,6 +45,9 @@ init flags url key =
     let
         parsedUrl =
             Maybe.withDefault NotFound (Parser.parse routeParser url)
+
+        _ =
+            Debug.log "parsedUrl" parsedUrl
 
         token =
             case parsedUrl of
@@ -60,7 +63,7 @@ init flags url key =
             }
 
         _ =
-            Debug.log "log " <| newModel
+            Debug.log "newModel ->  " <| newModel
     in
     ( newModel, Cmd.none )
 
@@ -99,7 +102,7 @@ update msg model =
 
 
 ---- PROGRAM ----
---main : Program () Model Msg
+-- main : Program () Model Msg
 
 
 main =
