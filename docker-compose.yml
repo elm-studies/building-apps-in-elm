@@ -13,11 +13,9 @@ services:
     ports:
       - 4500:3000
   server:
-    image: oauth-local-node-express
+    image: implementing-oauth
     container_name: oauth-server
-    volumes:
-      - ./server/public:/app/public
     env_file:
-      - ./server/.env
+      - ./.env
     ports:
       - 3500:3000
