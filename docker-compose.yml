@@ -13,8 +13,8 @@ services:
     ports:
       - 4500:3000
   server:
-    image: implementing-oauth
-    container_name: oauth-server
+    image: oauth-local-node-express
+    container_name: oauth-server-elm-excercise
     env_file:
       - ./.env
     ports:
