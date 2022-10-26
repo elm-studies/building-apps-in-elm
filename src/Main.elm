@@ -1,4 +1,4 @@
-module Main exposing (..)
+port module Main exposing (..)
 
 import Browser exposing (Document, UrlRequest)
 import Browser.Navigation exposing (Key)
@@ -62,10 +62,18 @@ init flags url key =
             , navigationKey = key
             }
 
+        commands =
+            case token of
+                Just (Token tok) ->
+                    sendTokenToStorage tok
+
+                Nothing ->
+                    Cmd.none
+
         _ =
-            Debug.log "newModel ->  " <| newModel
+            Debug.log "commands" commands
     in
-    ( newModel, Cmd.none )
+    ( newModel, commands )
 
 
 
@@ -114,3 +122,6 @@ main =
         , onUrlRequest = onUrlRequest
         , onUrlChange = onUrlChange
         }
+
+
+port sendTokenToStorage : String -> Cmd msg

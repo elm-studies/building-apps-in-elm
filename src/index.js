@@ -1,9 +1,13 @@
-import './main.css';
-import { Elm } from './Main.elm';
-import * as serviceWorker from './serviceWorker';
+import "./main.css";
+import { Elm } from "./Main.elm";
+import * as serviceWorker from "./serviceWorker";
 
-Elm.Main.init({
-  node: document.getElementById('root')
+const app = Elm.Main.init({
+  node: document.getElementById("root"),
+});
+
+app.ports.sendTokenToStorage.subscribe(function (token) {
+  localStorage.setItem("__DISTINCTLY_AVERAGE__", token);
 });
 
 // If you want your app to work offline and load faster, you can change
