@@ -4,6 +4,9 @@ import * as serviceWorker from "./serviceWorker";
 
 const app = Elm.Main.init({
   node: document.getElementById("root"),
+  flags: {
+    storedToken: localStorage.getItem("__DISTINCTLY_AVERAGE__"),
+  },
 });
 
 app.ports.sendTokenToStorage.subscribe(function (token) {

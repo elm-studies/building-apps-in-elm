@@ -9,7 +9,7 @@ import Url.Parser as Parser exposing ((</>), Parser)
 
 
 type alias Flags =
-    {}
+    { storedToken : Maybe String }
 
 
 type Token
@@ -47,7 +47,7 @@ init flags url key =
             Maybe.withDefault NotFound (Parser.parse routeParser url)
 
         _ =
-            Debug.log "parsedUrl" parsedUrl
+            Debug.log "flags" flags
 
         token =
             case parsedUrl of
@@ -55,7 +55,7 @@ init flags url key =
                     Just (Token githubToken)
 
                 _ ->
-                    Nothing
+                    Maybe.map Token flags.storedToken
 
         newModel =
             { token = token
@@ -71,7 +71,7 @@ init flags url key =
                     Cmd.none
 
         _ =
-            Debug.log "commands" commands
+            Debug.log "newModel" newModel
     in
     ( newModel, commands )
 
