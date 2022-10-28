@@ -1,27 +1,17 @@
 port module Main exposing (..)
 
+import Api exposing (..)
 import Browser exposing (Document, UrlRequest)
 import Browser.Navigation exposing (Key)
 import Html exposing (Html, div, h1, img, text)
 import Html.Attributes exposing (src)
+import Types exposing (..)
 import Url exposing (Url)
 import Url.Parser as Parser exposing ((</>), Parser)
 
 
 type alias Flags =
     { storedToken : Maybe String }
-
-
-type Token
-    = Token String
-
-
-type alias Model =
-    { token : Maybe Token, navigationKey : Key }
-
-
-type Msg
-    = NoOp
 
 
 type Route
@@ -65,7 +55,10 @@ init flags url key =
         commands =
             case token of
                 Just (Token tok) ->
-                    sendTokenToStorage tok
+                    Cmd.batch
+                        [ sendTokenToStorage tok
+                        , Api.fetchUserInformation (Token tok)
+                        ]
 
                 Nothing ->
                     Cmd.none
